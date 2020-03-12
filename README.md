@@ -1,4 +1,4 @@
-# gover
+# gover [![GoDoc](https://godoc.org/github.com/xgfone/gover?status.svg)](https://pkg.go.dev/github.com/xgfone/gover) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square)](https://raw.githubusercontent.com/xgfone/gover/master/LICENSE)
 Supply some simple public version variables.
 
 ## Usage
