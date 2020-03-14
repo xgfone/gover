@@ -25,8 +25,8 @@ BuildTime: %s
 `
 
 func PrintVersionInfo() {
-	fmt.Printf(verfmt, gover.Version, gover.Commit, gover.GetBuildTime(),
-		gover.StartTime, gover.GetElapsedTime())
+	fmt.Printf(verfmt, gover.Version, gover.Commit, gover.GetElapsedTime(),
+		gover.StartTime, gover.GetBuildTime())
 }
 
 func main() {
