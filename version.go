@@ -12,6 +12,7 @@ var (
 	Commit    string
 	Version   string
 	BuildTime string
+	StartTime time.Time
 )
 
 var (
@@ -60,3 +61,8 @@ func GetBuildTime() time.Time {
 	}
 	return buildTime
 }
+
+func init() { StartTime = time.Now() }
+
+// GetElapsedTime returns the elapsed time since the application starts.
+func GetElapsedTime() time.Duration { return time.Now().Sub(StartTime) }
