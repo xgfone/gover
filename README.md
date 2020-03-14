@@ -13,21 +13,24 @@ go get github.com/xgfone/gover
 package main
 
 import (
-    "fmt"
-    "github.com/xgfone/gover"
+	"fmt"
+	"github.com/xgfone/gover"
 )
 
 var verfmt = `Version: %s
 Commit: %s
+RunTime: %s
+StartTime: %s
 BuildTime: %s
 `
 
 func PrintVersionInfo() {
-    fmt.Printf(verfmt, gover.Version, gover.Commit, gover.GetBuildTime())
+	fmt.Printf(verfmt, gover.Version, gover.Commit, gover.GetBuildTime(),
+		gover.StartTime, gover.GetElapsedTime())
 }
 
 func main() {
-    PrintVersionInfo()
+	PrintVersionInfo()
 }
 ```
 
