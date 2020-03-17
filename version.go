@@ -2,6 +2,8 @@
 package gover
 
 import (
+	"fmt"
+	"runtime"
 	"strconv"
 	"sync"
 	"time"
@@ -66,3 +68,14 @@ func init() { StartTime = time.Now() }
 
 // GetElapsedTime returns the elapsed time since the application starts.
 func GetElapsedTime() time.Duration { return time.Now().Sub(StartTime) }
+
+const texttmpl = `Version:   %s
+GoVersion: %s
+OS/Arch:   %s/%s
+Built:     %s
+Commit:    %s`
+
+// Text returns the version information based on the text mode.
+func Text() string {
+	return fmt.Sprintf(texttmpl, Version, runtime.Version(), runtime.GOOS, runtime.GOARCH, GetBuildTime().Format(time.RFC3339), Commit)
+}
