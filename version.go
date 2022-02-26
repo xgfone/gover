@@ -1,4 +1,4 @@
-// Copyright 2020 xgfone
+// Copyright 2020~2022 xgfone
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,14 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package gover supplies some simple public version variables.
+// Package gover provides some simple public version variables.
 package gover
 
 import (
-	"fmt"
+	"bytes"
 	"runtime"
 	"strconv"
+	"strings"
 	"sync"
+	"text/template"
 	"time"
 )
 
@@ -74,22 +76,49 @@ func GetBuildTime() time.Time {
 				}
 			}
 		}
+		buildTime = buildTime.UTC()
 	}
 	return buildTime
 }
 
-func init() { StartTime = time.Now() }
+func init() { StartTime = time.Now().UTC() }
 
 // GetElapsedTime returns the elapsed time since the application starts.
-func GetElapsedTime() time.Duration { return time.Now().Sub(StartTime) }
+func GetElapsedTime() time.Duration { return time.Now().UTC().Sub(StartTime) }
 
-const texttmpl = `Version:   %s
-GoVersion: %s
-OS/Arch:   %s/%s
-Built:     %s
-Commit:    %s`
+// TextTemplate is used to format the text version, which is a go text template.
+var TextTemplate = `Version:   {{ .Version }}
+GoVersion: {{ .GoVersion }}
+OS/Arch:   {{ .GOOS }}/{{ .GOARCH }}
+Commit:    {{ .Commit }}
+Built:     {{ .BuildTime }}
+Start:     {{ .StartTime }}`
 
-// Text returns the version information based on the text mode.
+// Text returns the version information by the text template "TextTemplate",
+// and supports the context datas as follow:
+//   .GOOS
+//   .GOARCH
+//   .GoVersion
+//   .Version
+//   .Commit
+//   .BuildTime
+//   .StartTime
 func Text() string {
-	return fmt.Sprintf(texttmpl, Version, runtime.Version(), runtime.GOOS, runtime.GOARCH, GetBuildTime().Format(time.RFC3339), Commit)
+	datas := map[string]interface{}{
+		"GOOS":      runtime.GOOS,
+		"GOARCH":    runtime.GOARCH,
+		"GoVersion": strings.TrimPrefix(runtime.Version(), "go"),
+
+		"Version":   Version,
+		"Commit":    Commit,
+		"BuildTime": GetBuildTime().Format(time.RFC3339),
+		"StartTime": StartTime.Format(time.RFC3339),
+	}
+
+	buf := bytes.NewBuffer(make([]byte, 0, 256))
+	err := template.Must(template.New("version").Parse(TextTemplate)).Execute(buf, datas)
+	if err != nil {
+		panic(err)
+	}
+	return buf.String()
 }

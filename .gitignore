@@ -33,5 +33,9 @@ test_*
 # log
 *.log
 
+# hidden files
+_*
+.*
+
 # VS Code
 .vscode/
