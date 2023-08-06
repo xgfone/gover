@@ -91,18 +91,18 @@ var TextTemplate = `Version:   {{ .Version }}
 GoVersion: {{ .GoVersion }}
 OS/Arch:   {{ .GOOS }}/{{ .GOARCH }}
 Commit:    {{ .Commit }}
-Built:     {{ .BuildTime }}
-Start:     {{ .StartTime }}`
+Built:     {{ .BuildTime }}`
 
 // Text returns the version information by the text template "TextTemplate",
 // and supports the context datas as follow:
-//   .GOOS
-//   .GOARCH
-//   .GoVersion
-//   .Version
-//   .Commit
-//   .BuildTime
-//   .StartTime
+//
+//	.GOOS
+//	.GOARCH
+//	.GoVersion
+//	.Version
+//	.Commit
+//	.BuildTime
+//	.StartTime
 func Text() string {
 	datas := map[string]interface{}{
 		"GOOS":      runtime.GOOS,
